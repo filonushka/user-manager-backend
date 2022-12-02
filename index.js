@@ -1,15 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 import { registerValidation, loginValidation } from "./validations.js";
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import * as UserController from "./controllers/UserController.js";
 
 mongoose
-  .connect(
-    "mongodb+srv://admin:admin@cluster0.zubpkej.mongodb.net/user-manager?retryWrites=true&w=majority"
-  )
+  .connect(process.env.DB_URL)
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -18,7 +18,7 @@ mongoose
   });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cors());
 
@@ -57,5 +57,5 @@ app.listen(PORT, (err) => {
   if (err) {
     return console.error(err);
   }
-  console.log(`Server is running`);
+  console.log(`Server is running ${PORT}`);
 });
